@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--properties优先级：SqlSessionFactoryBuilder class方法配置的properties>config.properties配置>当前properties元素体内配置 -->
+	<properties resource="database.properties">
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</properties>
+	
+	<settings>
+		<!-- 全局的映射器启用或禁用缓存，默认为true -->
+		<setting name="cacheEnabled" value="true" />
+		<!-- 全局启用或禁用延迟加载，默认为true，取决驱动器 -->
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+	
+	<!-- 内置Java基本数据类型和常用的集合的别名，大小写不敏感 -->
+	<typeAliases>
+		<typeAlias alias="User" type="com.jcode.mybatis.model.User" />
+		
+		<!-- 为com.demo.mybatis.domain包下的所有实体类配置别名，
+		     比如com.demo.mybatis.domain.User这个实体类的别名就会被设置成User
+         -->
+        <package name="com.jcode.mybatis.model"/>
+        
+	</typeAliases>
+	
+	<!-- java和数据库之间的数据转换器 -->
+    <typeHandlers>
+       <typeHandler handler="com.demo.mybatis.typeHandler.StringArrayTypeHandler" jdbcType="VARCHAR" javaType="[Ljava.lang.String;"/>
+       <!-- 注解方式 -->
+       <typeHandler handler="com.demo.mybatis.typeHandler.StringArrayTypeHandler2" />
+    </typeHandlers>
+	<!-- plugins -->
+	<plugins>
+		<plugin interceptor="com.demo.mybatis.plugin.ExamplePlugin">
+			<property name="someProperty" value="100" />
+		</plugin>
+		<!-- <plugin interceptor="com.mybatisdemo.plugin.PageInterceptor">  
+           <property name="databaseType" value="Oracle"/>  
+       </plugin> -->
+       <plugin interceptor="com.demo.mybatis.plugin.PaginationInterceptor" />
+	</plugins>
+	<environments default="development">
+		<environment id="development">
+		    <!-- 事务管理器类型，JDBC直接简单的使用了Java JDBC的提交和回滚设置，它依赖于从数据源得来的连接来管理事物范围 -->
+			<transactionManager type="JDBC" />
+			<!-- 数据源配置，这些属性通过DriverManag er.getConnec tion(url,driverProperties) 方法传递给数据库驱动 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+				<!-- 使用 driver.+属性 添加额外参数 -->
+				<property name="driver.encoding" value="UTF8" />
+				
+			</dataSource>
+			
+			<!-- 从JDNI中寻找数据源 -->
+			<!-- <dataSource type="JNDI">
+				<property name="initial_context" value="${initial_context}" />
+				<property name="data_source" value="${data_source}" />
+				//使用 env.+属性 添加额外参数
+				<property name="env.encoding=UTF8" value="${data_source}" />
+			</dataSource> -->
+			
+		</environment>
+		<environment id="test">
+			<!-- MANAGED几乎不包含事务管理，会让容器管理 -->
+			<transactionManager type="MANAGED" >
+				<property name="closeConnection" value="false"/>
+			</transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- 使用相对于类路径的资源 
+		<mapper resource="com/demo/mybatis/mapper/user.xml" />
+-->
+		<!-- 使用完全限定路径 
+		<mapper url="file:///var/sqlmaps/AuthorMapper.xml"/> 
+		
+		
+		整体包
+		<package name="mapper"/>
+		
+		-->
+				<mapper resource="mapper/test.xml" />
+		
+	</mappers>
+	
+</configuration>
+
+<!-- 
+configuration配置
+ properties属性
+ settings设置
+ typeAliases类型简称
+ typeHandlers类型处理器
+ objectFactory对象工厂
+ plugins插件
+ environments环境
+ environment环境变量
+ transactionManager事务管理器
+ dataSource数据源
+ 映射器
+ -->

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcode.mybatis.model.User">
+	<!-- 开启缓存，缓存对象需要实现系列化Serializable，默认所有select语句会被缓存，所有insert，update和delete语句会刷新缓存 -->
+	<cache />
+	<!-- 开启缓存，缓存策略FIFO，刷新间隔60秒，缓存数量512，返回对象为只读 -->
+	<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" />
+	
+	<select id="selectUser" parameterType="int" resultType="User" statementType="PREPARED">
+		select *
+		from user where userid = #{userid}
+	</select>
+
+	<resultMap id="UserResult" type="User">
+		<id column="userid" property="userid" />
+		<id column="username" property="name" />
+		<id column="sex" property="sex" />
+	</resultMap>
+
+	<select id="selectOneUser" parameterType="int" resultMap="UserResult">
+		select
+		*
+		from user where userid = #{userid}
+	</select>
+
+	<!-- 属性flushCache，useCache配置缓存才有效果，flushCache指明是否刷新缓存，默认false，useCache指明是否使用缓存，默认true -->
+	<select id="selectUsers" parameterType="int" resultMap="UserResult" flushCache="true" useCache="false">
+		select
+		*
+		from user
+	</select>
+
+	<select id="selectUsersByCondition" parameterType="map" resultMap="UserResult">
+		select
+		*
+		from user
+		<where>
+			<if test="name != null">
+				AND name like #{name}
+			</if>
+			<if test="sex != null">
+				AND sex like #{sex}
+			</if>
+			<if test="interests != null">
+				AND interests in 
+				<foreach item="item" index="index" collection="interests" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where> 
+		limit #{start}, #{size}
+	</select>
+	
+	<!-- mysql,sqlserver支持自动生成主键，useGeneratedKeys属性表明是否生成主键，keyProperty属性表明数据库主键对应实体的字段id-->
+	<insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userid">
+		<!-- typeHandler指定自定义数据处理类型 -->
+		insert into user(name,sex,interests)
+		values (#{name},#{sex},#{interests, typeHandler=com.demo.mybatis.typeHandler.StringArrayTypeHandler}
+		)
+	</insert>
+
+	<!-- Oracle插入自增主键-->
+	<insert id="insertUserByOracle" parameterType="User" keyProperty="userid">
+		<!-- order指定BEFORE或AFTER来决定是先生成主键再插入记录还是先插入记录后生成主键 -->
+		<selectKey keyProperty="userid" resultType="String" order="BEFORE">
+			select nextval('user_sel')
+		</selectKey>
+		insert into user (userid,name) values (#{userid}, #{name})
+	</insert>
+	
+	
+	
+	<!-- #表示PreparedStatement预编译设置为占位符 ?，$用来设置表示会参与编译，有可能会导致SQL注入攻击，不安全，不应该使用 
+	     假如userId传入时为1时
+	     order by #{userId} 会解析成 order by 1
+	     order by ${userId} 会解析成 order by userId
+	     
+	    1. #将传入的数据都当成一个字符串，会对自动传入的数据加一个双引号。如：order by #user_id#，如果传入的值是111,那么解析成sql时的值为order by "111", 如果传入的值是id，则解析成的sql为order by "id".
+		2. $将传入的数据直接显示生成在sql中。如：order by $user_id$，如果传入的值是111,那么解析成sql时的值为order by user_id,  如果传入的值是id，则解析成的sql为order by id.
+		3. #方式能够很大程度防止sql注入。
+		4.$方式无法防止Sql注入。
+		5.$方式一般用于传入数据库对象，例如传入表名.
+		6.一般能用#的就别用$.
+		MyBatis排序时使用order by 动态参数时需要注意，用$而不是#
+	-->
+	
+	<select id="findtest" parameterType="int" resultType="user">
+		select * from user where userId = #{userId} order by ${userId}
+	</select>
+	
+	
+	
+	<resultMap id="result" type="user">
+		<id column="userId" property="userId" />
+		<id column="username" property="username" />
+		<id column="password" property="password" />
+		<id column="email" property="email" />
+		<id column="telephone" property="telephone" />
+		<id column="sex" property="sex" />
+	</resultMap>
+
+	<select id="findById" parameterType="int" resultType="user">
+		select * from user where userId = #{userId}
+	</select>
+
+	<select id="findAll" resultMap="result">
+		select * from user
+	</select>
+
+	<select id="findByParameter" parameterType="map" resultMap="result">
+		select * from user
+		where username like #{username} limit #{offset}, #{rows}
+	</select>
+
+	<insert id="save" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		insert into user(email,username, password,telephone,sex) values (#{email}, #{username}, #{password}, #{telephone}, #{sex})
+	</insert>
+
+	<update id="updateUser" parameterType="map">
+		update user 
+		<set>
+			<if test="email != null">email=#{email},</if>
+			<if test="username != null">username=#{username},</if>
+			<if test="password != null">password=#{password},</if>
+			<if test="telephone != null">telephone=#{telephone},</if>
+			<if test="sex != null">sex=#{sex},</if>
+		</set>
+		where userid = #{userid}
+	</update>
+	
+	<delete id="delete" parameterType="map">
+		delete from user where userId = #{userId}
+	</delete>
+	
+	<delete id="deleteById" parameterType="int">
+		delete from user where userId = #{userId}
+	</delete>
+	
+	
+</mapper>

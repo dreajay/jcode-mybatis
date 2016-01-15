@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcode.example.model.User">
+
+
+
+	<resultMap id="UserResult" type="com.jcode.example.model.User">
+		<id column="userid" property="userId" />
+		<id column="username" property="userName" />
+		<id column="sex" property="sex" />
+	</resultMap>
+
+
+	<select id="select" parameterType="int" resultMap="UserResult">
+		select
+		*
+		from
+		user where userid = #{userid}
+	</select>
+	
+	
+	<select id="select2" parameterType="int" resultMap="UserResult">
+		select
+		*
+		from
+		user where userid = #{userid}
+	</select>
+
+	<!-- mysql,sqlserver支持自动生成主键，useGeneratedKeys属性表明是否生成主键，keyProperty属性表明数据库主键对应实体的字段id -->
+	<insert id="insert" parameterType="User"
+		useGeneratedKeys="true" keyProperty="userid">
+		insert into user(userName,sex)
+		values
+		(#{userName},#{sex})
+	</insert>
+
+	<delete id="delete" parameterType="map">
+		delete from user where userId
+		= #{userId}
+	</delete>
+
+	<delete id="deleteById" parameterType="int">
+		delete from user where
+		userId = #{userId}
+	</delete>
+
+
+</mapper>
