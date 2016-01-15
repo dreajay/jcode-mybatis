@@ -103,6 +103,7 @@ public class SqlSessionFactoryManager {
 		TransactionFactory transactionFactory = new JdbcTransactionFactory();
 		Environment environment = new Environment("development", transactionFactory, dataSource);
 		Configuration configuration = new Configuration(environment);
+//		configuration.addMapper(UserMapper.class);
 		return new SqlSessionFactoryBuilder().build(configuration);
 	}
 
