@@ -10,8 +10,6 @@ import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 
-import com.jcode.util.Log4jUtil;
-
 /**
  * Mybatis拦截器只能拦截四种类型的接口：Executor、StatementHandler、ParameterHandler和ResultSetHandler。
  * Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed)
@@ -31,7 +29,6 @@ public class ExamplePlugin implements Interceptor {
 	 */
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
-		Log4jUtil.error(this, "intercept:"+invocation);
 		return invocation.proceed();
 	}
 
@@ -40,7 +37,6 @@ public class ExamplePlugin implements Interceptor {
 	 */
 	@Override
 	public Object plugin(Object target) {
-		Log4jUtil.error(this, "plugin:"+target);
 		// 当目标类是Executor类型时，才包装目标类，否则直接返回目标本身,减少目标被代理的次数
         if (target instanceof Executor) {
             return Plugin.wrap(target, this);
@@ -59,7 +55,5 @@ public class ExamplePlugin implements Interceptor {
 	 */
 	@Override
 	public void setProperties(Properties properties) {
-		Log4jUtil.error(this, "setProperties:"+properties.getProperty("someProperty"));
-		Log4jUtil.error(this, "setProperties:"+properties);
 	}
 }

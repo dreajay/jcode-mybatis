@@ -18,7 +18,6 @@ import org.junit.Test;
 import com.jcode.example.mapper.UserMapper;
 import com.jcode.example.model.User;
 import com.jcode.mybatis.SqlSessionFactoryManager;
-import com.jcode.util.Log4jUtil;
 
 public class UserMapperTest {
 
@@ -28,7 +27,6 @@ public class UserMapperTest {
 
 	@BeforeClass
 	public static void beforeClass() {
-		Log4jUtil.initLog4jByProperty();
 	}
 	@Before
 	public void before() {
