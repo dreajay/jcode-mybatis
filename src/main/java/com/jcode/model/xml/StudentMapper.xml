@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jcode.mapper.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.jcode.model.Student" >
+    <id column="studentId" property="studentId" jdbcType="INTEGER" />
+    <result column="studentName" property="studentName" jdbcType="VARCHAR" />
+    <result column="studentAge" property="studentAge" jdbcType="INTEGER" />
+    <result column="studentSex" property="studentSex" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from student
+    where studentId = #{studentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jcode.model.Student" >
+    insert into student (studentId, studentName, studentAge, 
+      studentSex)
+    values (#{studentId,jdbcType=INTEGER}, #{studentName,jdbcType=VARCHAR}, #{studentAge,jdbcType=INTEGER}, 
+      #{studentSex,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.jcode.model.Student" >
+    update student
+    set studentName = #{studentName,jdbcType=VARCHAR},
+      studentAge = #{studentAge,jdbcType=INTEGER},
+      studentSex = #{studentSex,jdbcType=VARCHAR}
+    where studentId = #{studentId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select studentId, studentName, studentAge, studentSex
+    from student
+    where studentId = #{studentId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select studentId, studentName, studentAge, studentSex
+    from student
+  </select>
+</mapper>

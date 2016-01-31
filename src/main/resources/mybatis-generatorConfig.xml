@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!-- 数据库连接jar包 -->
+	<classPathEntry
+		location="D:/maven/java/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar" />
+
+	<context id="db" targetRuntime="MyBatis3Simple"
+		defaultModelType="flat">
+
+		<property name="javaFileEncoding" value="UTF-8" />
+
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+			<!-- 生成的注释中是否包含生成的日期 true：是 ： false:否 -->
+			<property name="suppressDate" value="false" />
+		</commentGenerator>
+
+		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=utf-8"
+			userId="root" password="root" />
+
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- model对象 -->
+		<javaModelGenerator targetProject="jcode-mybatis" targetPackage="com.jcode.model">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="false" />
+		</javaModelGenerator>
+
+		<!-- SQL xml配置 -->
+		<sqlMapGenerator targetProject="jcode-mybatis" targetPackage="com.jcode.model.xml" >
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<!-- mapper对象
+		<javaClientGenerator targetProject="jcode-mybatis" targetPackage="com.jcode.mapper" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		 -->
+
+
+		<!-- <table schema="DB2ADMIN" tableName="ALLTYPES" domainObjectName="Customer"> 
+			<property name="useActualColumnNames" value="true" /> <generatedKey column="ID" 
+			sqlStatement="DB2" identity="true" /> <columnOverride column="DATE_FIELD" 
+			property="startDate" /> <ignoreColumn column="FRED" /> <columnRenamingRule 
+			searchString="^t_" replaceString=""/> <columnOverride column="LONG_VARCHAR_FIELD" 
+			jdbcType="VARCHAR" /> </table> -->
+
+		<!-- 所有表都生成 -->
+		<table tableName="%"> 
+			<property name="useActualColumnNames" value="true" /> 
+		</table> 
+<!-- 
+		<table tableName="user" domainObjectName="User">
+			<property name="useActualColumnNames" value="true" />
+			<columnOverride column="gender" javaType="java.lang.Integer" />
+		</table>
+		<table tableName="broadcast" domainObjectName="Broadcast">
+			<property name="useActualColumnNames" value="true" />
+			<columnOverride column="type" javaType="java.lang.Integer" />
+			<columnOverride column="deleteFlag" javaType="java.lang.Integer" />
+		</table>
+		<table tableName="broadcast_comment" domainObjectName="BroadcastComment">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="broadcast_like" domainObjectName="BroadcastLike">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="broadcast_media" domainObjectName="BroadcastMedia">
+			<property name="useActualColumnNames" value="true" />
+			<columnOverride column="type" javaType="java.lang.Integer" />
+		</table>
+
+
+		<table tableName="broadcast_comment" domainObjectName="BroadcastComment">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+-->
+	</context>
+</generatorConfiguration>

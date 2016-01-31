@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jcode.mapper.UserRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.jcode.model.UserRole" >
+    <id column="userId" property="userId" jdbcType="INTEGER" />
+    <result column="roleId" property="roleId" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_role
+    where userId = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jcode.model.UserRole" >
+    insert into user_role (userId, roleId)
+    values (#{userId,jdbcType=INTEGER}, #{roleId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.jcode.model.UserRole" >
+    update user_role
+    set roleId = #{roleId,jdbcType=VARCHAR}
+    where userId = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select userId, roleId
+    from user_role
+    where userId = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select userId, roleId
+    from user_role
+  </select>
+</mapper>

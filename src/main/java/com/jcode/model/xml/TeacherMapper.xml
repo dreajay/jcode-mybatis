@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jcode.mapper.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.jcode.model.Teacher" >
+    <id column="teacherId" property="teacherId" jdbcType="INTEGER" />
+    <result column="teacherName" property="teacherName" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from teacher
+    where teacherId = #{teacherId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jcode.model.Teacher" >
+    insert into teacher (teacherId, teacherName)
+    values (#{teacherId,jdbcType=INTEGER}, #{teacherName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.jcode.model.Teacher" >
+    update teacher
+    set teacherName = #{teacherName,jdbcType=VARCHAR}
+    where teacherId = #{teacherId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select teacherId, teacherName
+    from teacher
+    where teacherId = #{teacherId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select teacherId, teacherName
+    from teacher
+  </select>
+</mapper>
